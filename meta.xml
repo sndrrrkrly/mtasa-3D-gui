@@ -1,3 +1,8 @@
 <meta>
-    <script type="client" cache="false" src="buttonC.lua"/>
+     <oop>true</oop>
+
+     <script type="client" src="client/exports.lua"/>
+     <script type="client" src="client/utilsC.lua"/>
+
+    <script type="client" src="client/button/buttonC.lua"/>
 </meta>
