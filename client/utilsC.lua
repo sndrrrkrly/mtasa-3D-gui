@@ -69,3 +69,8 @@ function sign(p1, p2, p3)
 
      return _topLeft, _bottomLeft, _topRight, _bottomRight;
  end 
+
+ 
+function tableLenght(t)
+     local i = 0; for k, v in pairs(t) do i = i + 1; end return i;
+end

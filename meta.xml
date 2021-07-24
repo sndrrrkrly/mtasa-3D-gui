@@ -5,4 +5,15 @@
     <script type="client" src="client/utilsC.lua"/>
     <script type="client" src="client/button/buttonC.lua"/>
     <script type="client" src="client/list/listC.lua"/>
+    <script type="client" src="client/text/textC.lua"/>
+
+    <export function="createList" type="client"/>
+    <export function="changeListStatus" type="client"/>
+    <export function="destroyList" type="client"/>
+
+    <export function="createText" type="client"/>
+    <export function="destroyText" type="client"/>
+    
+    <export function="createButton" type="client"/>
+    <export function="destroyButton" type="client"/>
 </meta>

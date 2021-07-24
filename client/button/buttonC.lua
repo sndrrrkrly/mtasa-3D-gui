@@ -118,13 +118,24 @@ function Button:click(buttonName, buttonState, cursorX, cursorY)
      end
 end
 
+function Button:destroy(id)
+     if self.createdButtons[id] then
+          self.createdButtons[id] = {};
+          return;
+     end
+end
+
 function createButton(...)
     return Button:create(...);
 end
 
+function destroyButton(..)
+     return Button:destroy(...);
+end
+
 --[[
 createButton(1, {
-     positions = Vector3(11.14115, 5.15526, 3.10965),
+     positions = Vector3(15.10529, 3.83259, 3.10965),
      size = Vector2(1, 0.3),
      text = "Teszt Gomb2",
      rotation = 75,
