@@ -4,4 +4,5 @@
 
     <script type="client" src="client/utilsC.lua"/>
     <script type="client" src="client/button/buttonC.lua"/>
+    <script type="client" src="client/list/listC.lua"/>
 </meta>
