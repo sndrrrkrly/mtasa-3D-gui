@@ -114,15 +114,17 @@ Button:click = function(buttonName, buttonState, cursorX, cursorY)
           return;
      end
 
-     for k, v in pairs(Button) do
-          local positions, size, rotation, _, func = unpack(v);
-          
-          local cursorPosition = Vector2(cursorX, cursorY);
-          local a, b, c, d = getCorners(position, size, rotation);
+     if isCursorShowing() then
+          for k, v in pairs(Button) do
+               local positions, size, rotation, _, func = unpack(v);
+               
+               local cursorPosition = Vector2(cursorX, cursorY);
+               local a, b, c, d = getCorners(position, size, rotation);
 
-          if (check({cursorPosition.x, cursorPosition.y}, {a.x, a.y}, {b.x, b.y}, {c.x, c.y}) or check({cursorPosition.x, cursorPosition.y}, {c.x, c.y}, {d.x, d.y}, {b.x, b.y})) then
-               if buttonName == "left" and buttonState == "down" then
-                    func();
+               if (check({cursorPosition.x, cursorPosition.y}, {a.x, a.y}, {b.x, b.y}, {c.x, c.y}) or check({cursorPosition.x, cursorPosition.y}, {c.x, c.y}, {d.x, d.y}, {b.x, b.y})) then
+                    if buttonName == "left" and buttonState == "down" then
+                         func();
+                    end
                end
           end
      end
