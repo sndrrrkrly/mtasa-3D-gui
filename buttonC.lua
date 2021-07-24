@@ -5,7 +5,7 @@ function Button.create(id, properties)
      Button[id] = properties;
 
      local function draw()
-          local renderTarget = dxCreateRenderTarget(properties.size.x 512, properties.size.x 512, true);
+          local renderTarget = dxCreateRenderTarget(properties.size.x * 512, properties.size.x * 512, true);
           if not renderTarget then
                print("error creating renderTarget");
                return;
@@ -39,11 +39,11 @@ function Button.create(id, properties)
 end
 
 addEventHandler("onClientPreRender", root, function()
-     Button.create({
-          position = Vector3(0, 0, 0),
+     Button.create(1, {
+          position = Vector3(9.79688, 5.93223, 3.10965),
           rotation = 45,
           size = Vector2(1.5, 1.9),
-          text = "Teszt Gomb",
+          text = "Teszt Gomb"
           func = function()
                outputChatBox("asdasdasd")
           end
