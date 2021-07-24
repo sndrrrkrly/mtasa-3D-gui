@@ -1,19 +1,11 @@
 Button = {};
 
-local screenX, screenY = guiGetScreenSize();
-
 function Button.create(id, properties)
-     if type(properties) ~= "table" then
-          properties = {};
-     elseif Button[id] then
-          print("the id is already exists!");
-          return;
-     end
+     if type(properties) ~= "table" then properties = {}; end
+     Button[id] = properties;
 
-     Button[id] = true;
- 
      local function draw()
-          local renderTarget = dxCreateRenderTarget(screenX, 70, true);
+          local renderTarget = dxCreateRenderTarget(properties.size.x 512, properties.size.x 512, true);
           if not renderTarget then
                print("error creating renderTarget");
                return;
@@ -51,6 +43,17 @@ addEventHandler("onClientPreRender", root, function()
           position = Vector3(0, 0, 0),
           rotation = 45,
           size = Vector2(1.5, 1.9),
-          text = "Teszt Gomb"
+          text = "Teszt Gomb",
+          func = function()
+               outputChatBox("asdasdasd")
+          end
      });
+end);
+
+addEventHandler("onClientKey", root, function(keyName, hasPressed)
+     if keyName == "enter" and hasPressed then
+          for k, v in pairs(Button) do
+               print(v.text);
+          end
+     end
 end);
