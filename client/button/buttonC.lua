@@ -1,6 +1,8 @@
 Button = {
      rectangleColor = tocolor(30, 30, 30, 255),
      textColor = tocolor(255, 255, 255, 255),
+
+     createdButtons = {},
 };
 
 setmetatable({}, {__index = Button});
@@ -19,27 +21,19 @@ local handlers = {
           end
      },
      {
-          name = "onClientCursorMove"
-          func = function(...),
+          name = "onClientCursorMove",
+          func = function(...)
                return Button:hover(...)
-          end,
+          end
      }
 };
 
-Button:create = function(properties)
+function Button:create(id, properties)
      if type(properties) ~= "table" then
 		properties = {};
 	end
 
-     Button[#Button + 1] = {
-          positions = properties.positions or Vector3(0, 0, 0),
-          size = properties.size or Vector(1.5, 1.9),
-          text = properties.text or "",
-          rotation = properties.rotation or 45,
-          func = properties.func or function() 
-               return;
-          end
-     };
+     Button.createdButtons[id] = properties;
 
      for _, event in pairs(handlers) do
           removeEventHandler(event.name, root, event.func);
@@ -47,15 +41,13 @@ Button:create = function(properties)
      end
 end
 
-Button:render = function()
-     if #Button == 0 then
+function Button:render()
+     if #Button.createdButtons == 0 then
           return;
      end
      
-     for k, v in pairs(Button) do
-          local positions, size, rotation, text, _ = unpack(v);
-
-          local renderTarget = dxCreateRenderTarget(size.x * 512, size.y * 512, true);
+     for k, v in pairs(Button.createdButtons) do
+          local renderTarget = dxCreateRenderTarget(v.size.x * 512, v.size.y * 512, true);
           if not renderTarget then
                print("failed to create renderTarget");
                return;
@@ -63,40 +55,38 @@ Button:render = function()
                dxSetRenderTarget(renderTarget);
           end
 
-          dxDrawRectangle(0, 0, 200, 200, self.rectangleColor);
-          dxDrawText(text, 0, 0, 200, 200, self.textColor, 4, "default", "center", "center");
+          dxDrawRectangle(0, 0, v.size.x * 512, v.size.y * 512, self.rectangleColor);
+          dxDrawText(v.text, 0, 0, v.size.x * 512, v.size.y * 512, self.textColor, 4, "default", "center", "center");
 
           dxSetRenderTarget();
           dxDrawMaterialLine3D(
-               position.x,
-               position.y,
-               position.z + (size.y / 2),
-               position.x,
-               position.y,
-               position.z - (size.y / 2),
+               v.positions.x,
+               v.positions.y,
+               v.positions.z + (v.size.y / 2),
+               v.positions.x,
+               v.positions.y,
+               v.positions.z - (v.size.y / 2),
                renderTarget,
-               size.x,
+               v.size.x,
                tocolor(255, 255, 255, 255),
-               position.x + 1 * math.cos(math.rad(rotation)),
-               position.y + 1 * math.sin(math.rad(rotation)),
-               position.z
+               v.positions.x + 1 * math.cos(math.rad(v.rotation)),
+               v.positions.y + 1 * math.sin(math.rad(v.rotation)),
+               v.positions.z
           );
 
           destroyElement(renderTarget);
      end
 end
 
-Button:hover = function(_, _, cursorX, cursorY)
-     if #Button == 0 then 
+function Button:hover(_, _, cursorX, cursorY)
+     if #Button.createdButtons == 0 then
           return;
      end
-     
-     if isCursorShowing() then
-          for k, v in pairs(Button) do
-               local positions, size, rotation, _, _ = unpack(v);
 
+     if isCursorShowing() then
+          for k, v in pairs(Button.createdButtons) do
                local cursorPosition = Vector2(cursorX, cursorY);
-               local a, b, c, d = getCorners(position, size, rotation);
+               local a, b, c, d = getCorners(v.positions, v.size, v.rotation);
 
                if (check({cursorPosition.x, cursorPosition.y}, {a.x, a.y}, {b.x, b.y}, {c.x, c.y}) or check({cursorPosition.x, cursorPosition.y}, {c.x, c.y}, {d.x, d.y}, {b.x, b.y})) then
                     self.rectangleColor = tocolor(0, 255, 169, 255);
@@ -109,33 +99,37 @@ Button:hover = function(_, _, cursorX, cursorY)
      end
 end
 
-Button:click = function(buttonName, buttonState, cursorX, cursorY)
-     if #Button == 0 then
+function Button:click(buttonName, buttonState, cursorX, cursorY)
+     if #Button.createdButtons == 0 then
           return;
      end
 
      if isCursorShowing() then
-          for k, v in pairs(Button) do
-               local positions, size, rotation, _, func = unpack(v);
-               
+          for k, v in pairs(Button.createdButtons) do               
                local cursorPosition = Vector2(cursorX, cursorY);
-               local a, b, c, d = getCorners(position, size, rotation);
+               local a, b, c, d = getCorners(v.positions, v.size, v.rotation);
 
                if (check({cursorPosition.x, cursorPosition.y}, {a.x, a.y}, {b.x, b.y}, {c.x, c.y}) or check({cursorPosition.x, cursorPosition.y}, {c.x, c.y}, {d.x, d.y}, {b.x, b.y})) then
                     if buttonName == "left" and buttonState == "down" then
-                         func();
+                         v.func();
                     end
                end
           end
      end
 end
 
-Button:create({
-     positions = Vector3(0, 0, 0),
-     size = Vector(1.5, 1.9),
-     text = "Teszt Gomb",
-     rotation = 45,
+function createButton(...)
+    return Button:create(...);
+end
+
+--[[
+createButton(1, {
+     positions = Vector3(11.14115, 5.15526, 3.10965),
+     size = Vector2(1, 0.3),
+     text = "Teszt Gomb2",
+     rotation = 75,
      func = function() 
           outputChatBox("megnyomtad ezt a gombot, szuper vagy!");
-     end    
+     end  
 });
+--]]

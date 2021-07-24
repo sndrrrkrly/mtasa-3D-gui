@@ -1,8 +1,7 @@
 <meta>
-     <oop>true</oop>
+	<min_mta_version client = "1.3.0-9.04431"/>
+    <oop>true</oop>
 
-     <script type="client" src="client/exports.lua"/>
-     <script type="client" src="client/utilsC.lua"/>
-
+    <script type="client" src="client/utilsC.lua"/>
     <script type="client" src="client/button/buttonC.lua"/>
 </meta>
